@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from "react-native";
+import { s } from "./App.style";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Header from "./components/header/Header";
+import Body from "./components/body/Body";
+import Footer from "./components/footer/Footer";
+import { useState } from "react";
+import { listOfTasks } from "./utils/listOfTasks";
+import { TodoTypes } from "./utils/todoTypes";
 
 export default function App() {
+  const [todoList, setTodoList] = useState(listOfTasks);
+  const [todoType, setTodoType] = useState(TodoTypes.ALL);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <SafeAreaProvider>
+        <SafeAreaView style={s.app}>
+          <Header />
+          <Body
+            todoList={todoList}
+            todoType={todoType}
+            setTodoList={setTodoList}
+          />
+        </SafeAreaView>
+      </SafeAreaProvider>
+      <Footer
+        todoList={todoList}
+        todoType={todoType}
+        setTodoType={setTodoType}
+      />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
