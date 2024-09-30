@@ -2,7 +2,7 @@ import { Alert, ScrollView, Text, View } from "react-native";
 import { s } from "./Body.style";
 import CardTodo from "../cardTodo/CardTodo";
 import { listOfTasks } from "../../utils/listOfTasks";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { TodoTypes } from "../../utils/todoTypes";
 import AddTodo from "../addTodo/AddTodo";
 
@@ -12,6 +12,7 @@ export default function Body({
   setTodoList,
   displayAddDialog,
   saveStorage,
+  scrollViewRef,
 }) {
   function renderTodoList() {
     let renderlist = todoList;
@@ -65,7 +66,7 @@ export default function Body({
   return (
     <>
       <View style={s.body}>
-        <ScrollView>{renderTodoList()}</ScrollView>
+        <ScrollView ref={scrollViewRef}>{renderTodoList()}</ScrollView>
       </View>
       <AddTodo displayAddDialog={displayAddDialog} />
     </>
