@@ -4,7 +4,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Header from "./components/header/Header";
 import Body from "./components/body/Body";
 import Footer from "./components/footer/Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TodoTypes } from "./utils/todoTypes";
 import Dialog from "react-native-dialog";
 import uuid from "react-native-uuid";
@@ -17,6 +17,7 @@ export default function App() {
   const [todoType, setTodoType] = useState(TodoTypes.ALL);
   const [isAddDialogDisplayed, setIsAddDialogDisplayed] = useState(false);
   const [dialogInputText, setDialogInputText] = useState("");
+  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     loadStorage();
@@ -66,6 +67,9 @@ export default function App() {
     setIsAddDialogDisplayed(false);
     setDialogInputText("");
     saveStorage();
+    setTimeout(() => {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }, 300);
   }
 
   function renderAddDialog() {
@@ -109,6 +113,7 @@ export default function App() {
             setTodoList={setTodoList}
             displayAddDialog={displayAddDialog}
             saveStorage={saveStorage}
+            scrollViewRef={scrollViewRef}
           />
         </SafeAreaView>
       </SafeAreaProvider>
