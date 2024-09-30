@@ -1,28 +1,30 @@
-import { ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import { s } from "./Body.style";
 import CardTodo from "../cardTodo/CardTodo";
 import { listOfTasks } from "../../utils/listOfTasks";
 import { useState } from "react";
 import { TodoTypes } from "../../utils/todoTypes";
+import AddTodo from "../addTodo/AddTodo";
 
 export default function Body({ todoList, todoType, setTodoList }) {
   function renderTodoList() {
+    let renderlist = todoList;
     switch (todoType) {
       case TodoTypes.IN_PROGRESS:
-        const inProgressList = todoList.filter((todo) => !todo.completed);
-        return inProgressList.map((todo) => (
-          <CardTodo onPress={updateTodo} key={todo.id} todo={todo} />
-        ));
+        renderlist = todoList.filter((todo) => !todo.completed);
+        break;
       case TodoTypes.DONE:
-        const doneList = todoList.filter((todo) => todo.completed);
-        return doneList.map((todo) => (
-          <CardTodo onPress={updateTodo} key={todo.id} todo={todo} />
-        ));
-      default:
-        return todoList.map((todo) => (
-          <CardTodo onPress={updateTodo} key={todo.id} todo={todo} />
-        ));
+        renderlist = todoList.filter((todo) => todo.completed);
+        break;
     }
+    return renderlist.map((todo) => (
+      <CardTodo
+        onLongPress={() => deleteTodo(todo.id)}
+        onPress={updateTodo}
+        key={todo.id}
+        todo={todo}
+      />
+    ));
   }
 
   function updateTodo(todo) {
@@ -36,9 +38,28 @@ export default function Body({ todoList, todoType, setTodoList }) {
     setTodoList(updatedTodoList);
   }
 
+  function deleteTodo(id) {
+    Alert.alert("Delete Todo", "Are you sure you want to delete this task?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          const updatedTodoList = todoList.filter((todo) => todo.id !== id);
+          setTodoList(updatedTodoList);
+        },
+      },
+    ]);
+  }
+
   return (
-    <View style={s.body}>
-      <ScrollView>{renderTodoList()}</ScrollView>
-    </View>
+    <>
+      <View style={s.body}>
+        <ScrollView>{renderTodoList()}</ScrollView>
+      </View>
+      <AddTodo />
+    </>
   );
 }

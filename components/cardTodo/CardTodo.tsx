@@ -7,12 +7,17 @@ interface Props {
     completed: boolean;
   };
   onPress: any;
+  onLongPress: any;
 }
 
-export default function CardTodo({ todo, onPress }: Props) {
+export default function CardTodo({ todo, onPress, onLongPress }: Props) {
   const { task, completed } = todo;
   return (
-    <TouchableOpacity onPress={() => onPress(todo)} style={s.card}>
+    <TouchableOpacity
+      onLongPress={onLongPress}
+      onPress={() => onPress(todo)}
+      style={s.card}
+    >
       <Text style={completed ? s.titleCompleted : s.title}>{task}</Text>
       {completed && (
         <Image style={s.check} source={require("../../assets/check.png")} />
