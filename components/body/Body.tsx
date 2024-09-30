@@ -6,7 +6,13 @@ import { useState } from "react";
 import { TodoTypes } from "../../utils/todoTypes";
 import AddTodo from "../addTodo/AddTodo";
 
-export default function Body({ todoList, todoType, setTodoList }) {
+export default function Body({
+  todoList,
+  todoType,
+  setTodoList,
+  displayAddDialog,
+  saveStorage,
+}) {
   function renderTodoList() {
     let renderlist = todoList;
     switch (todoType) {
@@ -36,6 +42,7 @@ export default function Body({ todoList, todoType, setTodoList }) {
     const index = updatedTodoList.findIndex((t) => t.id === todo.id);
     updatedTodoList[index] = updatedTodo;
     setTodoList(updatedTodoList);
+    saveStorage();
   }
 
   function deleteTodo(id) {
@@ -49,6 +56,7 @@ export default function Body({ todoList, todoType, setTodoList }) {
         onPress: () => {
           const updatedTodoList = todoList.filter((todo) => todo.id !== id);
           setTodoList(updatedTodoList);
+          saveStorage();
         },
       },
     ]);
@@ -59,7 +67,7 @@ export default function Body({ todoList, todoType, setTodoList }) {
       <View style={s.body}>
         <ScrollView>{renderTodoList()}</ScrollView>
       </View>
-      <AddTodo />
+      <AddTodo displayAddDialog={displayAddDialog} />
     </>
   );
 }
